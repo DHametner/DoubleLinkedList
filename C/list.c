@@ -4,9 +4,26 @@
 
 #include "list.h"
 
-bool list_insert(struct Node** head_ref, void* value)
+struct DoubleLinkedList* list_create()
 {
-    if (value == NULL)
+    struct DoubleLinkedList* list = malloc(sizeof(struct DoubleLinkedList));
+
+    if (list == NULL)
+        return NULL;
+
+    list->head = NULL;
+    list->size = 0;
+    return list;
+}
+
+bool list_empty(struct DoubleLinkedList** list_ref)
+{
+    return *list_ref == NULL || (*list_ref)->head == NULL;
+}
+
+bool list_insert(struct DoubleLinkedList** list_ref, void *value)
+{
+    if (list_ref == NULL)
         return false;
 
     struct Node *new_node = malloc(sizeof(struct Node));
@@ -15,19 +32,22 @@ bool list_insert(struct Node** head_ref, void* value)
     new_node->next = NULL;
     new_node->prev = NULL;
 
-    if (*head_ref == NULL)
+    if ((*list_ref)->head == NULL)
     {
-        (*head_ref) = new_node;
+        (*list_ref)->head = new_node;
+        (*list_ref)->size++;
         return true;
     }
 
-    struct Node *current = *head_ref;
+    struct Node* current = (*list_ref)->head;
     while (current != NULL)
     {
         if (current->next == NULL)
         {
             current->next = new_node;
             new_node->prev = current;
+            (*list_ref)->size++;
+
             return true;
         }
         current = current->next;
@@ -35,18 +55,19 @@ bool list_insert(struct Node** head_ref, void* value)
     return false;
 }
 
-bool list_remove(struct Node** head_ref, void* value)
+bool list_remove(struct DoubleLinkedList** list_ref, void *value, bool (*compare)(const void*, const void*))
 {
-    if(value == NULL)
+    if (list_empty(list_ref) || value == NULL || compare == NULL)
         return false;
 
-    struct Node *current = *head_ref;
+    struct Node* current = (*list_ref)->head;
     while (current != NULL)
     {
-        if(strcmp(current->value, value) == 0)
+        if (compare(current->value, value) == true)
         {
             current->prev->next = current->next;
             current->next->prev = current->prev;
+            (*list_ref)->size--;
             free(current);
 
             return true;
@@ -56,14 +77,14 @@ bool list_remove(struct Node** head_ref, void* value)
     return false;
 }
 
-struct Node** list_at(struct Node** head_ref, size_t index)
+struct Node** list_at(struct DoubleLinkedList** list_ref, size_t index)
 {
-    if (*head_ref == NULL)
+    if (list_empty(list_ref))
         return NULL;
 
     size_t count = 0;
 
-    struct Node *current = *head_ref;
+    struct Node* current = (*list_ref)->head;
     while (current != NULL)
     {
         if (index == count)
@@ -71,50 +92,42 @@ struct Node** list_at(struct Node** head_ref, size_t index)
         current = current->next;
         count++;
     }
- return NULL;
+    return NULL;
 }
 
-bool list_contains(struct Node** head_ref, void* value)
+bool list_contains(struct DoubleLinkedList** list_ref, void *value, bool (*compare)(const void*, const void*))
 {
-    if (*head_ref == NULL || value == NULL)
+    if (list_empty(list_ref) || value == NULL || compare == NULL)
         return false;
 
-    struct Node *current = *head_ref;
+    struct Node* current = (*list_ref)->head;
     while (current != NULL)
     {
-
-        if(strcmp(current->value,value) == 0)
+        if (compare(current->value, value) == true)
             return true;
         current = current->next;
     }
     return false;
 }
 
-void list_clear(struct Node** head_ref)
+void list_clear(struct DoubleLinkedList** list_ref)
 {
-    if (*head_ref == NULL)
+    if (*list_ref == NULL)
         return;
 
-    struct Node *current = *head_ref;
+    struct Node* current = (*list_ref)->head;
     while (current != NULL)
     {
         free(current->prev);
         current = current->next;
     }
+    free((*list_ref));
+    *list_ref = NULL;
 }
 
-size_t list_size(struct Node** head_ref)
+size_t list_size(struct DoubleLinkedList** list_ref)
 {
-    size_t size = 0;
-
-    if (*head_ref == NULL)
-        return size;
-
-    struct Node *current = *head_ref;
-    while (current != NULL)
-    {
-        size++;
-        current = current->next;
-    }
-    return size;
+    if (list_empty(list_ref))
+        return 0;
+    return (*list_ref)->size;
 }

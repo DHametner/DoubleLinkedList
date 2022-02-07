@@ -15,14 +15,24 @@ struct Node
     struct Node* prev;
 };
 
-bool list_insert(struct Node**, void*);
+struct DoubleLinkedList
+{
+    struct Node* head;
+    size_t       size;
+};
 
-bool list_remove(struct Node**, void*);
+struct DoubleLinkedList* list_create();
 
-struct Node** list_at(struct Node**, size_t index);
+bool list_empty(struct DoubleLinkedList**);
 
-bool list_contains(struct Node**, void*);
+bool list_insert(struct DoubleLinkedList**, void*);
 
-void list_clear(struct Node**);
+bool list_remove(struct DoubleLinkedList**, void*, bool (*)(const void*, const void*));
 
-size_t list_size(struct Node**);
+struct Node** list_at(struct DoubleLinkedList**, size_t index);
+
+bool list_contains(struct DoubleLinkedList**, void*, bool (*)(const void*, const void*));
+
+void list_clear(struct DoubleLinkedList**);
+
+size_t list_size(struct DoubleLinkedList**);
