@@ -4,7 +4,7 @@
 
 #include "list.h"
 
-struct DoubleLinkedList* list_create()
+struct DoubleLinkedList *list_create()
 {
     struct DoubleLinkedList* list = malloc(sizeof(struct DoubleLinkedList));
 
@@ -18,15 +18,17 @@ struct DoubleLinkedList* list_create()
 
 bool list_empty(struct DoubleLinkedList** list_ref)
 {
-    return *list_ref == NULL || (*list_ref)->head == NULL;
+    if (*list_ref == NULL)
+        return false;
+    return (*list_ref)->head == NULL;
 }
 
-bool list_insert(struct DoubleLinkedList** list_ref, void *value)
+bool list_insert(struct DoubleLinkedList** list_ref, void* value)
 {
     if (list_ref == NULL)
         return false;
 
-    struct Node *new_node = malloc(sizeof(struct Node));
+    struct Node* new_node = malloc(sizeof(struct Node));
 
     new_node->value = value;
     new_node->next = NULL;
@@ -43,7 +45,7 @@ bool list_insert(struct DoubleLinkedList** list_ref, void *value)
     while (current != NULL)
     {
         if (current->next == NULL)
-        {
+{
             current->next = new_node;
             new_node->prev = current;
             (*list_ref)->size++;
@@ -55,16 +57,16 @@ bool list_insert(struct DoubleLinkedList** list_ref, void *value)
     return false;
 }
 
-bool list_remove(struct DoubleLinkedList** list_ref, void *value, bool (*compare)(const void*, const void*))
+bool list_remove(struct DoubleLinkedList** list_ref, void* value, bool (*compare)(const void*, const void*))
 {
-    if (list_empty(list_ref) || value == NULL || compare == NULL)
+    if (*list_ref == NULL || list_empty(list_ref) || value == NULL || compare == NULL)
         return false;
 
     struct Node* current = (*list_ref)->head;
     while (current != NULL)
     {
         if (compare(current->value, value) == true)
-        {
+{
             current->prev->next = current->next;
             current->next->prev = current->prev;
             (*list_ref)->size--;
@@ -77,9 +79,9 @@ bool list_remove(struct DoubleLinkedList** list_ref, void *value, bool (*compare
     return false;
 }
 
-struct Node** list_at(struct DoubleLinkedList** list_ref, size_t index)
+void* list_at(struct DoubleLinkedList** list_ref, size_t index)
 {
-    if (list_empty(list_ref))
+    if (*list_ref == NULL || list_empty(list_ref) || index < 0 || index > (*list_ref)->size - 1)
         return NULL;
 
     size_t count = 0;
@@ -88,16 +90,16 @@ struct Node** list_at(struct DoubleLinkedList** list_ref, size_t index)
     while (current != NULL)
     {
         if (index == count)
-            return &current;
+            return current->value;
         current = current->next;
         count++;
     }
     return NULL;
 }
 
-bool list_contains(struct DoubleLinkedList** list_ref, void *value, bool (*compare)(const void*, const void*))
+bool list_contains(struct DoubleLinkedList** list_ref, void* value, bool (*compare)(const void*, const void*))
 {
-    if (list_empty(list_ref) || value == NULL || compare == NULL)
+    if (*list_ref == NULL || list_empty(list_ref) || value == NULL || compare == NULL)
         return false;
 
     struct Node* current = (*list_ref)->head;
@@ -127,7 +129,7 @@ void list_clear(struct DoubleLinkedList** list_ref)
 
 size_t list_size(struct DoubleLinkedList** list_ref)
 {
-    if (list_empty(list_ref))
+    if (*list_ref == NULL || list_empty(list_ref))
         return 0;
     return (*list_ref)->size;
 }

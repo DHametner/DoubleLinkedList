@@ -9,10 +9,6 @@
 template<class T>
 class DoubleLinkedList : public IList<T>
 {
-private:
-    Node<T>* m_elem;
-    size_t   m_size;
-
 public:
     DoubleLinkedList();
 
@@ -23,17 +19,21 @@ public:
 public:
     bool isEmpty() override;
 
-    bool insert(T data) override;
+    void insert(T value) override;
 
     bool remove(T value) override;
 
-    void clear() override;
-
-    Node<T>& at(size_t) override;
+    T at(size_t) override;
 
     bool contains(T) override;
 
+    void clear() override;
+
     size_t size() override;
+
+private:
+    Node<T>* m_head;
+    size_t   m_size;
 };
 
 #include "DoubleLinkedList.inl"

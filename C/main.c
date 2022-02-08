@@ -16,16 +16,16 @@ void test_with_num(struct DoubleLinkedList** list_ref)
     printf("List size: %d \n", list_size(list_ref));
     printf("Is empty: %s\n", list_empty(list_ref) ? "true" : "false");
 
-    printf("Contains 2: %s \n", list_contains(list_ref, (void *) 2, &num_compare) ? "true" : "false");
-    printf("Contains 5: %s \n", list_contains(list_ref, (void *) 5, &num_compare) ? "true" : "false");
+    printf("Contains 2: %s \n", list_contains(list_ref, (void*) 2, &num_compare) ? "true" : "false");
+    printf("Contains 5: %s \n", list_contains(list_ref, (void*) 5, &num_compare) ? "true" : "false");
 
-    printf("Remove 3: %s \n", list_remove(list_ref, (void *) 3, &num_compare) ? "true" : "false");
-    printf("Remove 5: %s \n", list_remove(list_ref, (void *) 5, &num_compare) ? "true" : "false");
-    printf("Contains 3: %s \n", list_contains(list_ref, (void *) 3, &num_compare) ? "true" : "false");
+    printf("Remove 3: %s \n", list_remove(list_ref, (void*) 3, &num_compare) ? "true" : "false");
+    printf("Remove 5: %s \n", list_remove(list_ref, (void*) 5, &num_compare) ? "true" : "false");
+    printf("Contains 3: %s \n", list_contains(list_ref, (void*) 3, &num_compare) ? "true" : "false");
 
     for (size_t i = 0; i < list_size(list_ref); i++)
     {
-        printf("%d ", (int) (*list_at(list_ref, i))->value);
+        printf("%d ", (int) (list_at(list_ref, i)));
     }
     printf("\n");
     printf("END TESTING(with numbers) ...\n");
@@ -53,7 +53,7 @@ void test_with_str(struct DoubleLinkedList** list_ref)
 
     for (size_t i = 0; i < list_size(list_ref); i++)
     {
-        printf("%s ", (char*) (*list_at(list_ref, i))->value);
+        printf("%s ", (char*) (list_at(list_ref, i)));
     }
     printf("\n");
     printf("END TESTING(with strings): ...\n");
@@ -61,7 +61,7 @@ void test_with_str(struct DoubleLinkedList** list_ref)
 
 int main()
 {
-    struct DoubleLinkedList *list = NULL;
+    struct DoubleLinkedList* list = NULL;
 
     list = list_create();
     test_with_num(&list);

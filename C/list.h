@@ -29,7 +29,7 @@ bool list_insert(struct DoubleLinkedList**, void*);
 
 bool list_remove(struct DoubleLinkedList**, void*, bool (*)(const void*, const void*));
 
-struct Node** list_at(struct DoubleLinkedList**, size_t index);
+void* list_at(struct DoubleLinkedList**, size_t index);
 
 bool list_contains(struct DoubleLinkedList**, void*, bool (*)(const void*, const void*));
 

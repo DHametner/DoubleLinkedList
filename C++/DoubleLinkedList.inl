@@ -4,7 +4,7 @@
 
 template<class T>
 DoubleLinkedList<T>::DoubleLinkedList()
-        : m_elem(NULL),
+        : m_head(NULL),
           m_size(0)
 {
 }
@@ -12,42 +12,45 @@ DoubleLinkedList<T>::DoubleLinkedList()
 template<class T>
 bool DoubleLinkedList<T>::isEmpty()
 {
-    return m_size == 0;
+    return m_head == NULL;
 }
 
 template<class T>
-bool DoubleLinkedList<T>::insert(T data)
+void DoubleLinkedList<T>::insert(T value)
 {
-    if (m_elem == NULL)
-    {
-        m_elem = new Node<T>();
-        m_elem->value = data;
+    Node<T> *newNode = new Node<T>;
+    newNode->value = value;
 
+    if (m_head == NULL)
+    {
+        m_head = newNode;
         m_size++;
-        return true;
-    }
-
-    Node<T> *current;
-    for (current = m_elem; current != NULL; current = current->next)
+    } else
     {
-        if (current->next == NULL)
+        Node<T> *current;
+        for (current = m_head; current != NULL; current = current->next)
         {
-            current->next = new Node<T>();
-            current->next->prev = current;
-            current->next->value = data;
+            if (current->next == NULL)
+            {
+                current->next = newNode;
+                current->next->prev = current;
+                current->next->value = value;
 
-            m_size++;
-            return true;
+                m_size++;
+                break;
+            }
         }
     }
-    return false;
 }
 
 template<class T>
 bool DoubleLinkedList<T>::remove(T value)
 {
+    if (isEmpty())
+        return false;
+
     Node<T> *current;
-    for (current = m_elem; current != NULL; current = current->next)
+    for (current = m_head; current != NULL; current = current->next)
     {
         if (current->value == value)
         {
@@ -63,41 +66,56 @@ bool DoubleLinkedList<T>::remove(T value)
 }
 
 template<class T>
-void DoubleLinkedList<T>::clear()
+T DoubleLinkedList<T>::at(size_t index)
 {
-    Node<T> *current;
-    for (current = m_elem; current != NULL; current = current->next)
-    {
-        delete current->prev;
-    }
-    m_elem = NULL;
-    m_size = 0;
-}
+    T value = T();
 
-template<class T>
-Node<T> &DoubleLinkedList<T>::at(size_t index)
-{
+    if (isEmpty())
+        return value;
+
     size_t count = 0;
 
     Node<T> *current;
-    for (current = m_elem; current != NULL; current = current->next)
+    for (current = m_head; current != NULL; current = current->next)
     {
         if (count == index)
-            return *current;
+        {
+            value = current->value;
+            break;
+        }
         count++;
     }
+    return value;
 }
 
 template<class T>
 bool DoubleLinkedList<T>::contains(T value)
 {
+    if (isEmpty())
+        return false;
+
     Node<T> *current;
-    for (current = m_elem; current != NULL; current = current->next)
+    for (current = m_head; current != NULL; current = current->next)
     {
         if (current->value == value)
             return true;
     }
     return false;
+}
+
+template<class T>
+void DoubleLinkedList<T>::clear()
+{
+    if (isEmpty())
+        return;
+
+    Node<T> *current;
+    for (current = m_head; current != NULL; current = current->next)
+    {
+        delete current->prev;
+    }
+    m_head = NULL;
+    m_size = 0;
 }
 
 template<class T>

@@ -4,17 +4,17 @@
 
 #include "compare.h"
 
-bool num_compare(const void* num1, const void* num2)
+bool num_compare(const void* numOne, const void* numTwo)
 {
-    if(num1 == NULL || num2 == NULL)
+    if (numOne == NULL || numTwo == NULL)
         return false;
-    return num1 == num2;
+    return numOne == numTwo;
 }
 
-bool str_compare(const void* str1, const void* str2)
+bool str_compare(const void* strOne, const void* strTwo)
 {
-    if(str1 == NULL || str2 == NULL)
+    if (strOne == NULL || strTwo == NULL)
         return false;
-    return strcmp(str1, str2) == 0 ? true : false;
+    return strcmp(strOne, strTwo) == 0 ? true : false;
 }
 
